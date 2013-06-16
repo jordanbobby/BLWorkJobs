@@ -40,10 +40,10 @@ class Member(models.Model):
     Model for a Lodge Member of Beaver Lodge
     """
     nickname = models.CharField(max_length=30, blank=True, null=True)
-    member_since = models.DateField()
+    member_since = models.DateField(null=True, blank=True)
     year = models.CharField(max_length=2, choices=YEAR_IN_SCHOOL_CHOICES)
-    workjobs = models.ManyToManyField(WorkJob, through='ScheduledWorkJob')
-    positions = models.ManyToManyField(Position, through='PositionHeld')
+    workjobs = models.ManyToManyField('WorkJob', through='ScheduledWorkJob')
+    positions = models.ManyToManyField('Position', through='PositionHeld')
 
     def GetCurrentPositions():
         """
@@ -55,7 +55,7 @@ class WorkJobResponsibility(models.Model):
     """
     Model for a Work Job responsibility which has a priority of when it should get done
     """
-    workjob = models.ForeignKey(WorkJob)
+    workjob = models.ForeignKey('WorkJob')
     description = models.CharField(max_length=200)
     priority = models.IntegerField()
 
@@ -68,7 +68,7 @@ class WorkJob(models.Model):
     time_start = models.TimeField()
     time_due = models.TimeField()
     length = models.IntegerField()
-    days = models.ManyToManyField(DaysOfWeek)
+    days = models.ManyToManyField('DaysOfWeek')
 
 
 class Position(models.Model):
@@ -85,10 +85,10 @@ class PositionHeld(models.Model):
     """
     Intermediary model for representing the positions that members have held in the past
     """
-    position = models.ForeignKey(Position)
-    member = models.ForeignKey(Member)
-    begin_term = models.ForeignKey(Term)
-    end_term = models.ForeignKey(Term)
+    position = models.ForeignKey('Position')
+    member = models.ForeignKey('Member')
+    begin_term = models.ForeignKey('Term', related_name='+')
+    end_term = models.ForeignKey('Term', related_name='+')
     is_active = models.BooleanField()
 
 class Term(models.Model):
@@ -104,8 +104,8 @@ class ScheduledWorkJob(models.Model):
     Model for the individual work jobs scheduled each week
     """
     date_due = models.DateField()
-    member = models.ForeignKey(Member)
-    workjob = models.ForeignKey(WorkJob)
+    member = models.ForeignKey('Member')
+    workjob = models.ForeignKey('WorkJob')
 
 class Trade(models.Model):
     """
@@ -113,12 +113,12 @@ class Trade(models.Model):
     A job trade can be for the term or just for that particular position
     In order for a jobs to be traded, both parties must agree to the trade as well as the WM or AWM
     """
-    proposed_date = models.DateTimeField(auto_now_add=true)
-    proposed_by = models.ForeignKey(Member)
-    proposed_by_workjob = models.ForeignKey(ScheduledWorkJob)
-    recipient = models.ForeginKey(Member)
-    recipient_workjob = models.ForeignKey(ScheduledWorkJob)
-    approved_date = models.DateTimeField()
+    proposed_date = models.DateTimeField(auto_now_add=True)
+    proposed_by = models.ForeignKey('Member', related_name='trade_proposed')
+    proposed_by_workjob = models.ForeignKey('ScheduledWorkJob', related_name='proposed_trade')
+    recipient = models.ForeignKey('Member', related_name='trade_offered', null=True)
+    recipient_workjob = models.ForeignKey('ScheduledWorkJob', related_name='recipient_trade', null=True)
+    approved_date = models.DateTimeField(null=True)
     is_permanent_trade = models.BooleanField(default=False)
 
 class Fine(models.Model):
@@ -144,7 +144,7 @@ class MakeUpJob(models.Model):
     """
     title = models.CharField(max_length=30)
     description = models.CharField(max_length=200)
-    missed_workjob = models.ForeignKey(ScheduledWorkJob)
+    missed_workjob = models.ForeignKey('ScheduledWorkJob')
     date_due = models.DateField()
-    fine = models.ForeignKey(Fine)
+    fine = models.ForeignKey('Fine')
     completed = models.BooleanField(default = False)
