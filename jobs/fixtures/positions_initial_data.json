@@ -1,0 +1,14 @@
+[
+    {
+        "model": "jobs.Position",
+        "pk": 1,
+        "fields": {
+            "title" : "President",
+            "description" : "Head honcho, one who manages the exec members",
+            "seniority_points" : 1,
+            "is_exec" : true,
+            "percent_off_workjobs" : 50
+        }
+    }
+
+]

@@ -1,0 +1,54 @@
+
+[
+    {
+        "model": "jobs.DaysOfWeek",
+        "pk": 1,
+        "fields": {
+            "day" : "Sunday"
+        }
+    },
+    {
+        "model": "jobs.DaysOfWeek",
+        "pk": 2,
+        "fields": {
+            "day" : "Monday"
+        }
+    },
+    {
+        "model": "jobs.DaysOfWeek",
+        "pk": 3,
+        "fields": {
+            "day" : "Tuesday"
+        }
+    },
+    {
+        "model": "jobs.DaysOfWeek",
+        "pk": 4,
+        "fields": {
+            "day" : "Wednesday"
+        }
+    },
+    {
+        "model": "jobs.DaysOfWeek",
+        "pk": 5,
+        "fields": {
+            "day" : "Thursday"
+        }
+    },
+    {
+        "model": "jobs.DaysOfWeek",
+        "pk": 6,
+        "fields": {
+            "day" : "Friday"
+        }
+    },
+    {
+        "model": "jobs.DaysOfWeek",
+        "pk": 7,
+        "fields": {
+            "day" : "Saturday"
+        }
+    }
+]
+
+
